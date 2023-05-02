@@ -16,55 +16,61 @@ namespace fans
 
   public class FA1
   {
-        State q0 = new State
+        public static State q0 = new State()
         {
             Name = "q0",
             IsAcceptState = false,
             Transitions = new Dictionary<char, State>()
         };
-        State q1 = new State
+        public State q1 = new State()
         {
             Name = "q1",
             IsAcceptState = false,
             Transitions = new Dictionary<char, State>()
         };
-        State q2 = new State
+        public State q2 = new State()
         {
             Name = "q2",
             IsAcceptState = false,
             Transitions = new Dictionary<char, State>()
         };
-        State q3 = new State
+        public State q3 = new State()
         {
             Name = "q3",
             IsAcceptState = true,
             Transitions = new Dictionary<char, State>()
         };
-
+        public State q4 = new State()
+        {
+            Name = "q4",
+            IsAcceptState = false,
+            Transitions = new Dictionary<char, State>()
+        };
+        State InitialState = q0;
         public FA1()
         {
             q0.Transitions['0'] = q1;
-            q0.Transitions['1'] = q0;
-            q1.Transitions['0'] = q2;
+            q0.Transitions['1'] = q2;
+            q1.Transitions['0'] = q4;
             q1.Transitions['1'] = q3;
-            q2.Transitions['0'] = q2;
+            q2.Transitions['0'] = q3;
             q2.Transitions['1'] = q2;
-            q3.Transitions['0'] = q2;
+            q3.Transitions['0'] = q4;
             q3.Transitions['1'] = q3;
+            q4.Transitions['0'] = q4;
+            q4.Transitions['1'] = q4;
         }
-
         public bool? Run(IEnumerable<char> s)
         {
-            State current = q0;
-            foreach (var c in s)
+            State current = InitialState;
+            foreach (var c in s) 
             {
-                if (!current.Transitions.ContainsKey(c))
+                current = current.Transitions[c]; 
+                if (current == null)              
                     return null;
-
-                current = current.Transitions[c];
+               
             }
-
-            return current.IsAcceptState;
+            return current.IsAcceptState;         
         }
     }
 
